@@ -1,0 +1,17 @@
+    {% extends "layout/user" %}
+
+        {% block title %}
+        Главная страница
+        {% endblock %}
+
+
+    {% block content %}
+
+        <h2>Главная страница</h2>
+        <br>
+
+       <a href="/read" class="btn btn-outline-secondary me-2">Прочитать файл</a>
+       <a href="/save" class="btn btn-outline-secondary me-2">Сохранить файл в БД</a>
+       <a href="/view" class="btn btn-outline-secondary me-2">Просмотреть содержимое БД</a>
+
+    {% endblock %}

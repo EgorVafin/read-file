@@ -1,0 +1,55 @@
+spring:
+  session:
+    store-type: jdbc
+    jdbc:
+      flush-mode: on_save
+      initialize-schema: always
+      table-name: SPRING_SESSION
+
+  datasource:
+    password: '5AaKk2+S'
+    username: root
+    url: jdbc:mysql://localhost:3306/word_stat?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Moscow
+  jpa:
+    generate-ddl: 'true'
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+
+#  thymeleaf:
+#    cache: 'false'
+#  session:
+#    store-type: jdbc
+#    jdbc:
+#      flush-mode: on_save
+#      initialize-schema: always
+#      table-name: SPRING_SESSION
+
+#  flyway:
+#    locations: classpath:db/migration
+#  messages:
+#    fallback-to-system-locale: 'true'
+
+pebble:
+  cache: false
+  suffix: '.html.peb'
+  exposeRequestAttributes: true
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+server:
+  port: '8080'
+
+
+
+
+
+
+
+

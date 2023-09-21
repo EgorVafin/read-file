@@ -1,0 +1,14 @@
+    {% extends "layout/user" %}
+
+        {% block title %}
+        Чтение
+        {% endblock %}
+
+    {% block content %}
+
+        <h2>Файл прочитан</h2>
+        <br>
+
+       <a href="/" class="btn btn-outline-secondary me-2">Главная страница</a>
+
+    {% endblock %}
