@@ -11,6 +11,6 @@ public class LongWordsNormalizer implements Normalizer {
 
     @Override
     public List<String> normalize(List<String> words) {
-        return words.stream().filter(a -> a.length() < wordLength).toList();
+        return words.stream().filter(a -> a.length() <= wordLength).toList();
     }
 }

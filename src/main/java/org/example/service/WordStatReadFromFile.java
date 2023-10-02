@@ -1,16 +1,17 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.entity.WordAndCount;
+import org.example.entity.WordStatEntity;
 import org.example.normalizer.LongWordsNormalizer;
 import org.example.normalizer.NormalizerCollection;
 import org.example.normalizer.ShortWordsNormalizer;
-import org.example.repository.WordAndCountRepository;
-import org.example.save.SaveToCsvFile;
+import org.example.repository.WordStatEntityRepository;
 import org.example.save.SaveToDbMySql;
 import org.example.save.WordStatSaver;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,10 +19,10 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class WordAndCountBusinessLogic {
+public class WordStatReadFromFile {
     private final SaveToDbMySql saveToDbMySql;
     private final WordCounter wordCounter;
-    private final WordAndCountRepository repository;
+    private final WordStatEntityRepository repository;
 
 
     public void read() throws FileNotFoundException {
@@ -36,7 +37,9 @@ public class WordAndCountBusinessLogic {
         }
 
         LineToWordsSplitter lineToWordsSplitter = new LineToWordsSplitter();
+
         WordJsoupParser wordJsoupParser = new WordJsoupParser();
+
         WordFileReaderByFileAndScanner reader = new WordFileReaderByFileAndScanner(
                 fileNameForRead,
                 lineToWordsSplitter,
@@ -52,17 +55,15 @@ public class WordAndCountBusinessLogic {
             if (wordsList.isEmpty()) {
                 break;
             }
-
             wordCounter.addAll(wordsList);
         }
-
     }
 
     public void save() throws FileNotFoundException {
 
-        List<WordStat> wordStatList = wordCounter.getOrderedStat();
+        List<org.example.service.WordStat> wordStatList = wordCounter.getOrderedStat();
 
-        repository.deleteAll();
+        repository.deleteAll(); //???????????
 
         WordStatSaver saver1 = saveToDbMySql;
         saver1.save(wordStatList);
@@ -71,9 +72,10 @@ public class WordAndCountBusinessLogic {
         //saver.save(wordStatList);
     }
 
-    public List<WordAndCount> view() {
+    public Page<WordStatEntity> view(Integer offset, Integer limit) {
+        Pageable paging = PageRequest.of(offset, limit);
 
-        return repository.findAll();
+        return repository.findAll(paging);
     }
 
 }

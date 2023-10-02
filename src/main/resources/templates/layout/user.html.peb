@@ -19,6 +19,15 @@
         });
     </script>
 </head>
+
+<style>
+    body {
+        background: #A9A9A9; /* Цвет фона */
+        color: #000000; /* Цвет текста */
+    }
+</style>
+
+
 <body>
 <header>
 
@@ -28,10 +37,10 @@
     <div class="container">
 
 
-    {%block content%}
+        {%block content%}
 
 
-    {%endblock%}
+        {%endblock%}
 
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
 

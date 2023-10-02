@@ -1,0 +1,68 @@
+    {% extends "layout/user" %}
+
+        {% block title %}
+        Просмотр документа
+        {% endblock %}
+
+    {% block content %}
+    <h3>Страница просмотра документа</h3>
+    <br>
+
+    <a href="/" class="btn btn-secondary">Главная страница</a>
+    <br><br>
+
+    <div>
+        <div class="row">
+
+            <section class="list">
+                <div class="container-xxl">
+                    <div class="row">
+
+                        <table class="table table-sm table-success table-hover table-striped">
+                            <caption-top>Документ:</caption-top>
+                            <thead class="table-dark">
+                            <tr>
+                                <th bgcolor="silver">Id</th>
+                                <th bgcolor="silver">Название</th>
+                                <th bgcolor="silver">URL</th>
+                                <th bgcolor="silver">Дата</th>
+                            </tr>
+                            </thead>
+                            <tr>
+                                <td>{{ document.id }}</td>
+                                <td>{{ document.name }}</td>
+                                <td>{{ document.url }}</td>
+                                <td>{{ document.scrapedAt }}</td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm table-success table-hover table-striped">
+                            <caption-top>Список слов:</caption-top>
+                            <thead class="table-dark">
+                            <tr>
+                                <th bgcolor="silver">Id</th>
+                                <th bgcolor="silver">Слово</th>
+                                <th bgcolor="silver">Количество</th>
+                            </tr>
+                            </thead>
+
+                            {% for word in words %}
+                                <tr>
+                                    <td>{{ word.id }}</td>
+                                    <td>{{ word.word }}</td>
+                                    <td>{{ word.count }}</td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+    </div>
+
+    <a href="/" class="btn btn-secondary">Главная страница</a>
+
+    {% endblock %}

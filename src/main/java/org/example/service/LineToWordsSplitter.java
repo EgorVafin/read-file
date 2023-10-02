@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class LineToWordsSplitter {
 
     public List<String> split(String line) {
-        String[] wordsFromLine = line.split("[ .,!?;:]+");
+        String[] wordsFromLine = line.split("[ <>/$\"=\\-_.,!?;:()»«]+");
 
         return List.of(wordsFromLine);
     }

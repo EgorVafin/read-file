@@ -4,14 +4,138 @@
         Главная страница
         {% endblock %}
 
-
     {% block content %}
 
-        <h2>Главная страница</h2>
-        <br>
+    <h3>Главная страница</h3>
+    <br>
 
-       <a href="/read" class="btn btn-outline-secondary me-2">Прочитать файл</a>
-       <a href="/save" class="btn btn-outline-secondary me-2">Сохранить файл в БД</a>
-       <a href="/view" class="btn btn-outline-secondary me-2">Просмотреть содержимое БД</a>
+    <a href="/document/add" class="btn btn-secondary">Распарсить URL</a>
+    <div><br></div>
+
+    <section class="list">
+
+        <div class="container-sm">
+            <div class="row">
+
+                <table class="table table-sm table-success table-hover table-striped">
+                    <caption-top>Статистика слов по всем документам:</caption-top>
+                    <thead class="table-dark">
+                    <tr>
+                        <th bgcolor="silver">Слово</th>
+                        <th bgcolor="silver">Количество</th>
+                    </tr>
+                    </thead>
+                    {% for word in words %}
+                        <tr>
+                            <td>{{ word.word }}</td>
+                            <td>{{ word.count }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <div class="container-xl">
+            <div class="row">
+
+                <div>
+                    <label for="filter_name">Название:</label>
+                    <input type="text" name="filter_name" id="filter_name"
+                           value="{{ documentFilter.filter_name }}"/>
+                </div>
+
+            </div>
+            <div style="margin-top: 10px; margin-bottom: 10px;">
+                <button type="submit" class="btn btn-secondary">Поиск</button>
+                <a href="/" class="btn btn-secondary">Сбросить</a>
+            </div>
+        </div>
+
+
+
+
+
+                <table class="table table-sm table-success table-hover table-striped">
+                    <caption-top>Список документов:</caption-top>
+                    <thead class="table-dark">
+                    <tr>
+                        <th bgcolor="silver">Имя</th>
+                        <th bgcolor="silver">URL</th>
+                        <th bgcolor="silver">Текст</th>
+                        <th bgcolor="silver">Дата</th>
+                    </tr>
+                    </thead>
+                    {% for document in documents %}
+                        <tr>
+                            <td><a href="document\{{ document.id }}">{{ document.name }}</a></td>
+                            <td>{{ document.url }}</td>
+                            <td>{{ document.text }}</td>
+                            <td>{{ document.scrapedAt }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <nav style="float: left">
+                    <ul class="pagination">
+
+
+                        <li class="page-item">
+                                {%if documents.getNumber() != 0 %}
+                                <a class="page-link"
+                                   href="/?offset={{ documents.getNumber() - 1 }}&limit={{ documents.getSize() }}">🡰</a>
+                                {%else%}
+                                <a class="page-link">🡰</a>
+                                {%endif%}
+                        </li>
+
+                        <li class="page-item">
+                                {%if (documents.getNumber() + 1) !=  documents.getTotalPages()%}
+                                <a class="page-link"
+                                   href="/?offset={{ documents.getNumber() + 1 }}&limit={{ documents.getSize() }}">🡲</a>
+                                {%else%}
+                                <a class="page-link">🡲</a>
+                                {%endif%}
+                        </li>
+
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="col-md-6">
+                <div style="float: right">
+                    Страница {{ documents.getNumber() + 1 }} / {{ documents.getTotalPages() }}
+                    <script>
+                        function onSelectPages(value) {
+                            const url = new URL(window.location.href);
+                            const urlParams = url.searchParams;
+                            urlParams.set('offset', '0');
+                            urlParams.set('limit', value);
+                            const newUrl = url.toString();
+                            console.log(newUrl);
+
+                            window.location.href = newUrl;
+
+                        }
+                    </script>
+                    <select class="form-select" id="rowsPerPages"
+                            onchange="onSelectPages(this.options[this.selectedIndex].value)">
+                            {%for rows in rowsPerPage%}
+                            <option {%if rows == (documents.getSize()) %} selected {%endif%}
+                                                                       value="{{ rows }}">{{rows}}</option>
+                            {%endfor%}
+                    </select>
+
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
 
     {% endblock %}

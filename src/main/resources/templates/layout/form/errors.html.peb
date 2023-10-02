@@ -1,0 +1,7 @@
+{%if hasFieldErrors(objName, fieldName) %}
+<div class="invalid-feedback" s>
+        {% for err in getFieldErrors(objName, fieldName) %}
+        <div>{{ err }}</div>
+        {% endfor %}
+</div>
+{%endif%}

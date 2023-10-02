@@ -1,5 +1,8 @@
 package org.example.service;
 
+
+import lombok.NoArgsConstructor;
+
 public class WordStat {
     public final String word;
     public final int count;
