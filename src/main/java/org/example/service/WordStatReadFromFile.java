@@ -5,7 +5,7 @@ import org.example.entity.WordStatEntity;
 import org.example.normalizer.LongWordsNormalizer;
 import org.example.normalizer.NormalizerCollection;
 import org.example.normalizer.ShortWordsNormalizer;
-import org.example.repository.WordStatEntityRepository;
+import org.example.app.word.WordStatEntityRepository;
 import org.example.save.SaveToDbMySql;
 import org.example.save.WordStatSaver;
 import org.springframework.data.domain.Page;

@@ -6,7 +6,7 @@
 
     {% block content %}
 
-    <h2>Добавление документа</h2>
+    <h5>Добавление документа</h5>
     <br>
 
     <div class="row">
@@ -22,17 +22,10 @@
 
             </div>
 
-            <div>
+            <div style="margin-top: 10px; margin-bottom: 10px;">
                 <button type="submit" class="btn btn-primary">Добавить</button>
+                <a href="/" class="btn btn-secondary btn-md">Отменить</a>
             </div>
-            <div>
-                <br>
-            </div>
-            <div>
-                <a href="/" class="btn btn-secondary">Отменить</a>
-            </div>
-            <br>
-            <a href="/document" class="btn btn-secondary">Список документов</a>
 
         </form>
     </div>

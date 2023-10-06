@@ -1,15 +1,12 @@
-package org.example.controller;
+package org.example.app.document;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.example.entity.DocumentEntity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
 public class DocumentFilter {
-    private String filter_name;
+    private String filter_name;//todo почему такое название ууу_пп
+    private String filter_url;
     //private List<DocumentEntity> filter_documents = new ArrayList<>();
 }

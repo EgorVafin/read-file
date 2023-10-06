@@ -6,12 +6,8 @@
 
     {% block content %}
 
-    <h3>Главная страница</h3>
+    <h5>Главная страница</h5>
     <br>
-
-    <a href="/document/add" class="btn btn-primary">Добавить документ</a>
-    <div><br></div>
-
     <section class="list">
 
         <div class="container-sm">
@@ -20,6 +16,7 @@
                 <caption-top>Статистика слов по всем документам:</caption-top>
                 <thead class="table-dark">
                 <tr>
+                    <th bgcolor="silver">#</th>
                     <th bgcolor="silver">Слово</th>
                     <th bgcolor="silver">Количество</th>
                     <th bgcolor="silver">Кол-во документов</th>
@@ -27,6 +24,7 @@
                 </thead>
                 {% for word in words %}
                     <tr>
+                        <td>{{ (words.getNumber() * words.getSize()) + loop.index + 1 }}</td>
                         <td>{{ word.word }}</td>
                         <td>{{ word.frequency }}</td>
                         <td>{{ word.docCount }}</td>
@@ -34,54 +32,82 @@
                 {% endfor %}
             </table>
 
-            <div>
 
-                {% if not words.isFirst() %}
-                    <a href="?page={{ words.getNumber()  }}">«Назад</a>
-                {%endif%}
-                {% if not words.isLast() %}
-                    <a href="?page={{ words.getNumber() + 2 }}">Вперед»</a>
-                {% endif %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-8">
+                        <nav style="float: left">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                        {%if words.getNumber() != 0 %}
+                                        <a class="page-link"
+                                           href="/?page={{ words.getNumber() }}">🡰</a>
+                                        {%endif%}
+                                </li>
+                                <li class="page-item">
+                                        {%if (words.getNumber() + 1) !=  words.getTotalPages()%}
+                                        <a class="page-link"
+                                           href="/?page={{ words.getNumber() + 2 }}">🡲</a>
+                                        {%endif%}
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                    <div class="col-4">
+                        <div style="float: right">
+                            Страница {{ words.getNumber() + 1 }} / {{ words.getTotalPages() }}
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
 
+            <form method="get">
+                <div class="row mb-3">
+                    <label for="filter_word" class="col-sm-1 col-form-label">Название</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="filter_word" name="filter_word"
+                               value="{{ filter.filter_word }}"/>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="filter_frequency" class="col-sm-1 col-form-label">Количество</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="filter_frequency" name="filter_frequency"
+                               value="{{ filter.filter_frequency }}"/>
+                    </div>
+                </div>
 
-                <div style="float: right">
-                    Страница {{ words.getNumber() + 1 }} / {{ words.getTotalPages() }}
-
-{#                    Страница {{ models.getNumber() + 1 }} / {{ models.getTotalPages() }}#}
-{#                    <script>#}
-{#                        function onSelectPages(value) {#}
-{#                            const url = new URL(window.location.href);#}
-{#                            const urlParams = url.searchParams;#}
-{#                            urlParams.set('offset', '0');#}
-{#                            urlParams.set('limit', value);#}
-{#                            const newUrl = url.toString();#}
-{#                            console.log(newUrl);#}
-
-{#                            window.location.href = newUrl;#}
-
-{#                        }#}
-{#                    </script>#}
-{#                    <select class="form-select" id="rowsPerPages"#}
-{#                            onchange="onSelectPages(this.options[this.selectedIndex].value)">#}
-{#                            {%for rows in rowsPerPage%}#}
-{#                            <option {%if rows == (models.getSize()) %} selected {%endif%}#}
-{#                                                                       value="{{ rows }}">{{rows}}</option>#}
-{#                            {%endfor%}#}
-{#                    </select>#}
-
+                <div class="search-container">
+                    <div>
+                        <label for="documentList">Документы</label>
+                        <select class="form-select select2" multiple="multiple"
+                                name="filter_document" id="documentList" style="width: 185px;">
+                                {%for document in documents%}
+                                <option value="{{ document.id }}"
+                                    {%if filter.filter_document is not null%}
+                                        {%for document2 in filter.filter_document%}
+                                            {% if document2.id == document.id %}selected="selected" {% endif %}
+                                        {%endfor%}
+                                    {%endif%}>
+                                        {{ document.name }}
+                                </option>
+                                {%endfor%}
+                        </select>
+                    </div>
                 </div>
 
 
+                <div style="margin-top: 10px; margin-bottom: 10px;">
+                    <button type="submit" class="btn btn-primary">Поиск</button>
+                    <a href="/" class="btn btn-secondary btn-md">Сбросить</a>
+                </div>
 
+            </form>
 
     </section>
-    <div>
-        <br>
-        <a href="/document" class="btn btn-secondary">Список документов</a>
-    </div>
-
 
 
     {% endblock %}

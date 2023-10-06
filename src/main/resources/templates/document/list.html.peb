@@ -5,11 +5,8 @@
         {% endblock %}
 
     {% block content %}
-    <h3>Страница просмотра документов</h3>
+    <h5>Страница просмотра документов</h5>
     <br>
-
-    <a href="/" class="btn btn-secondary">Главная страница</a>
-    <br><br>
 
     <div>
         <div class="row">
@@ -40,19 +37,25 @@
                     </table>
                 </div>
 
-                <form method="get">
 
-                    <div>
-                        <label for="filter_name">Название:</label>
-                        <input type="text" name="filter_name" id="filter_name"
-                               value="{{ filter.filter_name }}"/>
+                <form method="get">
+                    <div class="row mb-3">
+                        <label for="filter_name" class="col-sm-1 col-form-label">Название</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="filter_name" name="filter_name" value="{{ filter.filter_name }}"/>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="filter_url" class="col-sm-1 col-form-label">URL</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="filter_url" name="filter_url" value="{{ filter.filter_url }}"/>
+                        </div>
                     </div>
 
                     <div style="margin-top: 10px; margin-bottom: 10px;">
                         <button type="submit" class="btn btn-primary">Поиск</button>
-                        <a href="/document" class="btn btn-primary btn-md">Сбросить</a>
+                        <a href="/document" class="btn btn-secondary btn-md">Сбросить</a>
                     </div>
-
                 </form>
 
 
@@ -61,6 +64,5 @@
     </div>
     </div>
 
-    <a href="/" class="btn btn-secondary">Главная страница</a>
 
     {% endblock %}

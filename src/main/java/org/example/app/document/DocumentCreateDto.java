@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.app.document;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

@@ -5,11 +5,8 @@
         {% endblock %}
 
     {% block content %}
-    <h3>Страница просмотра документа</h3>
+    <h5>Страница просмотра документа</h5>
     <br>
-
-    <a href="/" class="btn btn-secondary">Главная страница</a>
-    <br><br>
 
     <div>
         <div class="row">
@@ -64,13 +61,6 @@
 
             </section>
         </div>
-    </div>
-    </div>
-
-    <a href="/" class="btn btn-secondary">Главная страница</a>
-    <div>
-        <br>
-        <a href="/document" class="btn btn-secondary">Список документов</a>
     </div>
 
     {% endblock %}

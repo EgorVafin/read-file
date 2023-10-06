@@ -2,7 +2,7 @@ package org.example.save;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entity.WordStatEntity;
-import org.example.repository.WordStatEntityRepository;
+import org.example.app.word.WordStatEntityRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

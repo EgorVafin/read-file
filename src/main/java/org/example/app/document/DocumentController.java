@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.app.document;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import org.example.normalizer.LongWordsNormalizer;
 import org.example.normalizer.Normalizer;
 import org.example.normalizer.NormalizerCollection;
 import org.example.normalizer.ShortWordsNormalizer;
-import org.example.repository.WordStatEntityRepository;
+import org.example.app.word.WordStatEntityRepository;
 import org.example.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;
@@ -105,6 +105,7 @@ public class DocumentController {
     public String view(@PathVariable("id") long id,
                        Model model) {
 
+        //todo правильно ли так. нужно ли два репозитория
         model.addAttribute("document", documentEntityRepository.findById(id).get());
         model.addAttribute("words", wordStatEntityRepository.findAllByDocumentId(id));
         return "document/view";
@@ -120,13 +121,15 @@ public class DocumentController {
     }
 
     private Specification<DocumentEntity> buildSearch(DocumentFilter filter) {
-
         Specification<DocumentEntity> searchCriteria = Specification.where(null);
 
         if (filter.getFilter_name() != null && !filter.getFilter_name().isBlank()) {
             searchCriteria = searchCriteria.and(DocumentEntityRepository.documentNameLike(filter.getFilter_name()));
         }
 
+        if (filter.getFilter_url() != null && !filter.getFilter_url().isBlank()) {
+            searchCriteria = searchCriteria.or(DocumentEntityRepository.documentUrlLike(filter.getFilter_url()));
+        }
         return searchCriteria;
     }
 }

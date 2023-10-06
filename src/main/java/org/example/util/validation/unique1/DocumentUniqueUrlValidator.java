@@ -3,7 +3,7 @@ package org.example.util.validation.unique1;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
-import org.example.controller.DocumentEntityRepository;
+import org.example.app.document.DocumentEntityRepository;
 import org.springframework.stereotype.Service;
 
 @Service //нужно ли ?

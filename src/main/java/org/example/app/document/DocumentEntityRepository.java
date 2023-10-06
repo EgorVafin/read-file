@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.app.document;
 
 import org.example.entity.DocumentEntity;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,6 +23,11 @@ public interface DocumentEntityRepository extends JpaRepository<DocumentEntity, 
     static Specification<DocumentEntity> documentNameLike(String name) {
         return (root, query, criteriaBuilder)
                 -> criteriaBuilder.like(root.get("name"), "%" + name + "%");
+    }
+
+    static Specification<DocumentEntity> documentUrlLike(String url) {
+        return (root, query, criteriaBuilder)
+                -> criteriaBuilder.like(root.get("url"), "%" + url + "%");
     }
 
     static Specification<DocumentEntity> customersIn(List<DocumentEntity> documents) {
