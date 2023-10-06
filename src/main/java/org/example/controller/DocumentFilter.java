@@ -11,5 +11,5 @@ import java.util.List;
 @Setter
 public class DocumentFilter {
     private String filter_name;
-    private List<DocumentEntity> filter_documents = new ArrayList<>();
+    //private List<DocumentEntity> filter_documents = new ArrayList<>();
 }

@@ -1,4 +1,4 @@
-package org.example.util.validation.unique2;
+package org.example.util.validation.unique1;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

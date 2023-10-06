@@ -1,0 +1,66 @@
+    {% extends "layout/user" %}
+
+        {% block title %}
+        Список документов
+        {% endblock %}
+
+    {% block content %}
+    <h3>Страница просмотра документов</h3>
+    <br>
+
+    <a href="/" class="btn btn-secondary">Главная страница</a>
+    <br><br>
+
+    <div>
+        <div class="row">
+
+            <section class="list">
+                <div class="container-xxl">
+
+                    <table class="table table-sm table-success table-hover table-striped">
+                        <caption-top>Список документов:</caption-top>
+                        <thead class="table-dark">
+                        <tr>
+                            <th bgcolor="silver">Id</th>
+                            <th bgcolor="silver">Имя</th>
+                            <th bgcolor="silver">URL</th>
+                            <th bgcolor="silver">Дата</th>
+                        </tr>
+                        </thead>
+
+                        {% for document in documents %}
+                            <tr>
+                                <td>{{ document.id }}</td>
+                                <td><a href="/document/{{ document.id }}">{{ document.name }}</a></td>
+                                <td>{{ document.url }}</td>
+                                <td>{{ document.scrapedAt }}</td>
+                            </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+
+                <form method="get">
+
+                    <div>
+                        <label for="filter_name">Название:</label>
+                        <input type="text" name="filter_name" id="filter_name"
+                               value="{{ filter.filter_name }}"/>
+                    </div>
+
+                    <div style="margin-top: 10px; margin-bottom: 10px;">
+                        <button type="submit" class="btn btn-primary">Поиск</button>
+                        <a href="/document" class="btn btn-primary btn-md">Сбросить</a>
+                    </div>
+
+                </form>
+
+
+            </section>
+        </div>
+    </div>
+    </div>
+
+    <a href="/" class="btn btn-secondary">Главная страница</a>
+
+    {% endblock %}

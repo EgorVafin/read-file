@@ -9,15 +9,13 @@ import org.example.normalizer.Normalizer;
 import org.example.normalizer.NormalizerCollection;
 import org.example.normalizer.ShortWordsNormalizer;
 import org.example.repository.WordStatEntityRepository;
-import org.example.service.LineToWordsSplitter;
-import org.example.service.UrlParser;
-import org.example.service.WordCounter;
-import org.example.service.WordStat;
-import org.example.util.validation.unique1.DocumentUniqueNameValidator;
+import org.example.service.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,9 +31,7 @@ public class DocumentController {
 
     private final WordStatEntityRepository wordStatEntityRepository;
     private final DocumentEntityRepository documentEntityRepository;
-    private final DocumentUniqueNameValidator documentUniqueNameValidator;
-    private final WordCounter wordCounter;
-    private final UrlParser urlParser;
+    private final UrlDataLoader urlParser;
 
     @GetMapping("/document/add")
     public String create(Model model) {
@@ -46,27 +42,37 @@ public class DocumentController {
     }
 
     @PostMapping("/document/add")
-    public String create(@Valid @ModelAttribute(name = "document") DocumentCreateDto documentCreateDto
-            , BindingResult bindingResult, Model model) {
+    public String create(
+            @Valid @ModelAttribute(name = "document") DocumentCreateDto documentCreateDto,
+            BindingResult bindingResult,
+            Model model) {
 
-        documentUniqueNameValidator.validate(documentCreateDto, bindingResult);
+        String text = null;
+
+        try {
+            text = urlParser.parse(documentCreateDto.getUrl());
+        } catch (UrlDataLoadException e) {
+            //todo проверить, добавляется ли ошибка к полю url
+            //bindingResult.addError(new ObjectError("document", "Error fetch data"));
+
+            ObjectError error = new ObjectError("document", "???");
+            bindingResult.rejectValue("url", "value.negative", new ObjectError[]{error}, "Ошибка получения данных");
+            model.addAttribute("document", documentCreateDto);
+            return "document/add";
+        }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("document", documentCreateDto);
             return "document/add";
         }
 
-        String text = urlParser.parse(documentCreateDto.getUrl());
-        if (text == null) {
-            return "redirect:/";
-        }
+        List<String> words = new LineToWordsSplitter().split(text);
 
-        LineToWordsSplitter lineToWordsSplitter = new LineToWordsSplitter();
-        List<String> words = lineToWordsSplitter.split(text);
-
-        Normalizer normalizer = new NormalizerCollection(List.of(new ShortWordsNormalizer(2),
+        Normalizer normalizer = new NormalizerCollection(List.of(new ShortWordsNormalizer(3),
                 new LongWordsNormalizer(15)));
 
+        //todo как работает normalizer
+        WordCounter wordCounter = new WordCounter();
         wordCounter.addAll(normalizer.normalize(words));
 
         //как правильно сделать mapping?
@@ -76,7 +82,9 @@ public class DocumentController {
         documentEntity.setScrapedAt(new Date());
 
         //толстый или тонкий контроллер?
-        List<org.example.service.WordStat> wordStatList = wordCounter.getOrderedStat();
+
+        List<WordStat> wordStatList = wordCounter.getOrderedStat();
+
         List<WordStatEntity> wordStatEntityList = new ArrayList<>();
 
         for (WordStat element : wordStatList) {
@@ -90,10 +98,6 @@ public class DocumentController {
         documentEntityRepository.save(documentEntity);
         wordStatEntityRepository.saveAll(wordStatEntityList);
 
-        //Попытка прочитать данные по url. Если смогли прочитать данные, то
-        //создаем документа, читаем статистику и записываем в базу
-        // А если не смогли то выдать ошибку на страницу(НЕ удалось прочитать данные по указанному url)
-
         return "redirect:/";
     }
 
@@ -104,5 +108,25 @@ public class DocumentController {
         model.addAttribute("document", documentEntityRepository.findById(id).get());
         model.addAttribute("words", wordStatEntityRepository.findAllByDocumentId(id));
         return "document/view";
+    }
+
+    @GetMapping("/document")
+    public String list(Model model, DocumentFilter filter) {
+
+        List<DocumentEntity> documentEntityList = documentEntityRepository.findAll(buildSearch(filter));
+        model.addAttribute("filter", filter);
+        model.addAttribute("documents", documentEntityList);
+        return "document/list";
+    }
+
+    private Specification<DocumentEntity> buildSearch(DocumentFilter filter) {
+
+        Specification<DocumentEntity> searchCriteria = Specification.where(null);
+
+        if (filter.getFilter_name() != null && !filter.getFilter_name().isBlank()) {
+            searchCriteria = searchCriteria.and(DocumentEntityRepository.documentNameLike(filter.getFilter_name()));
+        }
+
+        return searchCriteria;
     }
 }
