@@ -5,7 +5,7 @@
         {% endblock %}
 
     {% block content %}
-    <h5>Страница просмотра документа</h5>
+    <h6 class="display-6">Просмотр документа {{ document.name }}</h6>
     <br>
 
     <div>
@@ -15,39 +15,49 @@
                 <div class="container-xxl">
                     <div class="row">
 
-                        <table class="table table-sm table-success table-hover table-striped">
-                            <caption-top>Документ:</caption-top>
-                            <thead class="table-dark">
-                            <tr>
-                                <th bgcolor="silver">Id</th>
-                                <th bgcolor="silver">Название</th>
-                                <th bgcolor="silver">URL</th>
-                                <th bgcolor="silver">Дата</th>
-                                <th bgcolor="silver">Текст</th>
-                            </tr>
-                            </thead>
-                            <tr>
-                                <td>{{ document.id }}</td>
-                                <td>{{ document.name }}</td>
-                                <td>{{ document.url }}</td>
-                                <td>{{ document.scrapedAt }}</td>
-                                <td>{{ document.text }}</td>
-                            </tr>
-                        </table>
+                        <div style="margin-top: 10px; margin-bottom: 10px;">
+                            <a href="/document/{{ document.id }}/edit" class="btn btn-outline-primary me-2">Редактировать</a>
+                        </div>
 
                         <table class="table table-sm table-success table-hover table-striped">
-                            <caption-top>Список слов:</caption-top>
+                            <caption-top>Список слов в документе:</caption-top>
                             <thead class="table-dark">
                             <tr>
+                                <th bgcolor="silver">#</th>
                                 <th bgcolor="silver">Id</th>
-                                <th bgcolor="silver">Слово</th>
-                                <th bgcolor="silver">Количество</th>
+                                <th bgcolor="silver">
+                                    <ul class="pagination">
+                                        Слово&nbsp
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="/document/{{ document.id }}?page={{ words.getNumber() + 1 }}&sortBy=word&order=ASC">▲</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="/document/{{ document.id }}?page={{ words.getNumber() + 1 }}&sortBy=word&order=DSC">▼</a>
+                                        </li>
+                                    </ul>
+                                </th>
+                                <th bgcolor="silver">
+                                    <ul class="pagination">
+                                        Количество&nbsp
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="/document/{{ document.id }}?page={{ words.getNumber() + 1 }}&sortBy=count&order=ASC">▲</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="/document/{{ document.id }}?page={{ words.getNumber() + 1 }}&sortBy=count&order=DSC">▼</a>
+                                        </li>
+                                    </ul>
+                                </th>
                                 <th bgcolor="silver">Документ</th>
                             </tr>
                             </thead>
 
                             {% for word in words %}
                                 <tr>
+                                    <td>{{ (words.getNumber() * words.getSize()) + loop.index + 1 }}</td>
                                     <td>{{ word.id }}</td>
                                     <td>{{ word.word }}</td>
                                     <td>{{ word.count }}</td>
@@ -56,8 +66,60 @@
                             {% endfor %}
 
                         </table>
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-8">
+                                    <nav style="float: left">
+                                        <ul class="pagination">
+                                            <li class="page-item">
+                                                    {%if words.getNumber() != 0 %}
+                                                    <a class="page-link"
+                                                       href="/document/{{ document.id }}?page={{ words.getNumber() }}">🡰</a>
+                                                    {%endif%}
+                                            </li>
+                                            <li class="page-item">
+                                                    {%if (words.getNumber() + 1) !=  words.getTotalPages()%}
+                                                    <a class="page-link"
+                                                       href="/document/{{ document.id }}?page={{ words.getNumber() + 2 }}">🡲</a>
+                                                    {%endif%}
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+
+                                <div class="col-4">
+                                    <div style="float: right">
+                                        Страница {{ words.getNumber() + 1 }} / {{ words.getTotalPages() }}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+
+
+                <table class="table table-sm table-success table-hover table-striped">
+                    <caption-top>Документ:</caption-top>
+                    <thead class="table-dark">
+                    <tr>
+                        <th bgcolor="silver">Id</th>
+                        <th bgcolor="silver">Название</th>
+                        <th bgcolor="silver">URL</th>
+                        <th bgcolor="silver">Дата</th>
+                        <th bgcolor="silver">Текст</th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td>{{ document.id }}</td>
+                        <td>{{ document.name }}</td>
+                        <td>{{ document.url }}</td>
+                        <td>{{ document.scrapedAt }}</td>
+                        <td>{{ document.text }}</td>
+                    </tr>
+                </table>
 
             </section>
         </div>

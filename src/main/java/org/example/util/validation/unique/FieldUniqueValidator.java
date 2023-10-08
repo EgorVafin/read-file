@@ -35,7 +35,7 @@ public class FieldUniqueValidator implements ConstraintValidator<FieldUnique, Ob
             boolean isValid = fieldValidatorService.exist(value, this.fieldName);
 
             if (!isValid) {
-                //отключаем стандартное поведение (добавление ошибки не на поле а на сам класс)
+                //отключаем стандартное поведение (добавление ошибки не на поле, а на сам класс)
                 constraintValidatorContext.disableDefaultConstraintViolation();
                 //формируем ошибку для нужного поля
                 constraintValidatorContext

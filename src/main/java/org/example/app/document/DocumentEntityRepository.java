@@ -9,6 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -16,7 +17,9 @@ public interface DocumentEntityRepository extends JpaRepository<DocumentEntity, 
         PagingAndSortingRepository<DocumentEntity, Long>,
         JpaSpecificationExecutor<DocumentEntity> {
 
-    Optional<DocumentEntity> findByName(String name);
+    Optional<Object> findByNameAndIdNot(String name, long id);
+
+    Optional<Object> findByName(String name);
 
     Optional<DocumentEntity> findByUrl(String url);
 

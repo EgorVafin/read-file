@@ -31,16 +31,15 @@ public class GeneralController {
 
         List<DocumentEntity> documents = documentEntityRepository.findAll();
         model.addAttribute("documents", documents);
+        Pageable paging = PageRequest.of(page - 1, perPage);
+        model.addAttribute("filter", filter);
 
         if (filter.getFilter_word() == null && filter.getFilter_frequency() == null) {
-            Pageable paging = PageRequest.of(page - 1, perPage);
             Page<SummaryWordStat> summaryWordStatList = wordStatEntityRepository.findCommonWordsStat(paging);
 
-            model.addAttribute("filter", filter);
+
             model.addAttribute("words", summaryWordStatList);
         } else {
-            Pageable paging = PageRequest.of(page - 1, perPage);
-
             List<WordStatEntity> summaryWordStatList2 = wordStatEntityRepository.findAll(buildSearch(filter));
 
             List<String> words = new ArrayList<>();
@@ -51,8 +50,6 @@ public class GeneralController {
             model.addAttribute("words", summaryWordStatList3);
         }
 
-
-        model.addAttribute("filter", filter);
 
 
         return "index";

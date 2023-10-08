@@ -1,0 +1,44 @@
+    {% extends "layout/user" %}
+
+        {% block title %}
+        Редактирование документа
+        {% endblock %}
+
+    {% block content %}
+    <h6 class="display-6"> Редактирование документа</h6>
+    <br>
+
+    <div>
+        <div class="row">
+
+            <section class="list">
+                <div class="container-xxl">
+
+                    <form action="/document/{{id}}/edit" method="post">
+{#                        {% include "layout/csrf" %}#}
+                        <input type="hidden" name="id" value="{{ document.id }}">
+
+                        {% include "layout/form/input" with {'label':'Название', 'required': true,
+                        'objName':'document', 'fieldName':'name', 'value': document.name } %}
+
+                        <br><br>
+                        <p>
+                            <button type="submit" class="btn btn-primary">Обновить</button>
+                            <td>
+                                <a href="/document"
+                                   class="btn btn-outline-secondary me-2"
+                                   onclick="return confirm('Вы уверены?')"
+                                >Отменить</a>
+                            </td>
+
+                        </p>
+                    </form>
+
+                </div>
+            </section>
+        </div>
+    </div>
+    </div>
+
+
+    {% endblock %}

@@ -2,6 +2,7 @@ package org.example.app.document;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.app.word.SummaryWordStat;
 import org.example.entity.DocumentEntity;
 import org.example.entity.WordStatEntity;
 import org.example.normalizer.LongWordsNormalizer;
@@ -11,19 +12,21 @@ import org.example.normalizer.ShortWordsNormalizer;
 import org.example.app.word.WordStatEntityRepository;
 import org.example.service.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -103,11 +106,22 @@ public class DocumentController {
 
     @GetMapping("/document/{id}")
     public String view(@PathVariable("id") long id,
+                       @RequestParam(required = false, defaultValue = "1") Integer page,
+                       @RequestParam(required = false, defaultValue = "20") Integer perPage,
+                       @RequestParam(required = false, defaultValue = "word") String sortBy,
+                       @RequestParam(required = false, defaultValue = "ASC") String order,
                        Model model) {
 
+        Optional<DocumentEntity> document = documentEntityRepository.findById(id);
+        model.addAttribute("document", document.get());
+
+        Pageable paging = order.equals("ASC") ?
+                PageRequest.of(page - 1, perPage, Sort.by(sortBy).ascending()) :
+                PageRequest.of(page - 1, perPage, Sort.by(sortBy).descending());
+
+        Page<WordStatEntity> wordStatEntityList = wordStatEntityRepository.findByDocument(paging, document);
         //todo правильно ли так. нужно ли два репозитория
-        model.addAttribute("document", documentEntityRepository.findById(id).get());
-        model.addAttribute("words", wordStatEntityRepository.findAllByDocumentId(id));
+        model.addAttribute("words", wordStatEntityList);
         return "document/view";
     }
 

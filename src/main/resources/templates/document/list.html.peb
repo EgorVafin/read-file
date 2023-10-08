@@ -5,7 +5,7 @@
         {% endblock %}
 
     {% block content %}
-    <h5>Страница просмотра документов</h5>
+    <h6 class="display-6">Список документов</h6>
     <br>
 
     <div>
@@ -54,7 +54,7 @@
 
                     <div style="margin-top: 10px; margin-bottom: 10px;">
                         <button type="submit" class="btn btn-primary">Поиск</button>
-                        <a href="/document" class="btn btn-secondary btn-md">Сбросить</a>
+                        <a href="/document" class="btn btn-outline-secondary me-2">Сбросить</a>
                     </div>
                 </form>
 

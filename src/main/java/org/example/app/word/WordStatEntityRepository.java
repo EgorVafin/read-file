@@ -12,6 +12,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface WordStatEntityRepository extends JpaRepository<WordStatEntity, Long>,
@@ -40,8 +41,6 @@ public interface WordStatEntityRepository extends JpaRepository<WordStatEntity, 
             nativeQuery = true)
     public Page<SummaryWordStat> findCommonWordsStatAfterFilter(Pageable page, List<String> words);
 
-
-
     Page<WordStatEntity> findAll(Pageable pageable);
 
 //    @Query(value = "SELECT count(document_id) as docCount,word as word, SUM(count) as frequency FROM word_stat WHERE word like %:word% GROUP BY word order by frequency DESC",
@@ -49,12 +48,16 @@ public interface WordStatEntityRepository extends JpaRepository<WordStatEntity, 
 //            nativeQuery = true)
 //    public Page<SummaryWordStat> findCommonWordsStat1(String word, Pageable page);
 
+    //todo countQuery
     @Query(value = "SELECT count(document_id) as docCount,word as word, SUM(count) as frequency FROM word_stat GROUP BY word order by frequency DESC",
             countQuery = "select count(distinct word) from word_stat",
             nativeQuery = true)
     public Page<SummaryWordStat> findCommonWordsStat(Pageable page);
 
 
-    //@Query(value = "SELECT word as name, SUM(count) as 'count' FROM word_stat GROUP BY word", nativeQuery = true)
-    public List<WordStatEntity> findAllByDocumentId(long id);
+//    @Query(value = "SELECT word as word,  count as count, document_id FROM word_stat WHERE document_id = 1", nativeQuery = true)
+//    List <WordStatEntity> findAllByDocumentId(long id);
+
+    Page <WordStatEntity> findByDocument(Pageable page, Optional<DocumentEntity> document);
+
 }
