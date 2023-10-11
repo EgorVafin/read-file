@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.print.Doc;
 import java.util.Optional;
@@ -36,12 +37,13 @@ public class DocumentEditController {
     public String update(@PathVariable("id") long id,
                          @Valid @ModelAttribute(name = "document") DocumentEditFormRequest documentEditFormRequest,
                          BindingResult bindingResult,
-                         Model model) {
+                         Model model,
+                         RedirectAttributes redirectAttributes) {
 
         DocumentEntity document = documentEntityRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Объект не найден"));
         model.addAttribute("document", documentEditFormRequest);
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "document/edit_form";
         }
 
@@ -49,7 +51,21 @@ public class DocumentEditController {
         modelMapper.map(documentEditFormRequest, document);
         documentEntityRepository.save(document);
 
+        redirectAttributes.addFlashAttribute("flashMessage",
+                "Документ \"" + document.getName() + "\" успешно обновлен");
         return "redirect:/document";
+    }
 
+    @GetMapping("/document/{id}/delete")
+    public String delete(@PathVariable("id") long id, RedirectAttributes redirectAttributes) {
+
+        DocumentEntity document = documentEntityRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Объект не найден"));
+
+        redirectAttributes.addFlashAttribute("flashMessage",
+                "Документ \"" + document.getName() + "\" успешно удален");
+
+        documentEntityRepository.delete(document);
+        return "redirect:/document";
     }
 }

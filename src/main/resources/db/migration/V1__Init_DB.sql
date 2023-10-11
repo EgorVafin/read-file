@@ -1,0 +1,12 @@
+drop table if exists document;
+drop table if exists user;
+drop table if exists word_stat;
+create table document (id bigint not null auto_increment, scraped_at datetime(6), user_id bigint, url varchar(512), name varchar(255), text TEXT, primary key (id)) engine=InnoDB;
+create table user (id bigint not null auto_increment, email varchar(255) not null, first_name varchar(255) not null, last_name varchar(255) not null, password varchar(255) not null, primary key (id)) engine=InnoDB;
+create table word_stat (count integer, document_id bigint not null, id bigint not null auto_increment, word varchar(255), primary key (id)) engine=InnoDB;
+alter table document add constraint UK_sm02rg1sk8u5k0n4k1m6guylu unique (url);
+alter table document add constraint UK_36vs45u76s1n950kwxfa5lyhc unique (name);
+alter table user add constraint UK_ob8kqyqqgmefl0aco34akdtpe unique (email);
+alter table word_stat add constraint UK6kmvq7yfsrg9yg48ytk8qmfoe unique (word, document_id);
+alter table document add constraint FKjhdxdv9sijhujiynqbb5jc010 foreign key (user_id) references user (id);
+alter table word_stat add constraint FK579xtxrw973l54r0p68bwm1it foreign key (document_id) references document (id) on delete cascade;

@@ -17,6 +17,11 @@
 
                         <div style="margin-top: 10px; margin-bottom: 10px;">
                             <a href="/document/{{ document.id }}/edit" class="btn btn-outline-primary me-2">Редактировать</a>
+
+                            <a href="/document/{{ document.id }}/delete"
+                               class="btn btn-outline-primary me-2"
+                               onclick="return confirm('Вы уверены?')"
+                            >Удалить</a>
                         </div>
 
                         <table class="table table-sm table-success table-hover table-striped">
@@ -52,6 +57,7 @@
                                     </ul>
                                 </th>
                                 <th bgcolor="silver">Документ</th>
+
                             </tr>
                             </thead>
 
@@ -62,6 +68,7 @@
                                     <td>{{ word.word }}</td>
                                     <td>{{ word.count }}</td>
                                     <td>{{ word.document.id }}</td>
+
                                 </tr>
                             {% endfor %}
 
@@ -110,6 +117,7 @@
                         <th bgcolor="silver">URL</th>
                         <th bgcolor="silver">Дата</th>
                         <th bgcolor="silver">Текст</th>
+                        <th bgcolor="silver">Пользователь</th>
                     </tr>
                     </thead>
                     <tr>
@@ -118,6 +126,7 @@
                         <td>{{ document.url }}</td>
                         <td>{{ document.scrapedAt }}</td>
                         <td>{{ document.text }}</td>
+                        <td>{{ document.user.firstName + " " +  document.user.lastName}}</td>
                     </tr>
                 </table>
 

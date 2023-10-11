@@ -77,6 +77,20 @@
             {#                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">#}
             {#                <button class="btn btn-outline-success" type="submit">Search</button>#}
             {#            </form>#}
+
+            <div class="col-md-3 text-end">
+                {%if request.getUserPrincipal() is not null %}
+                    <span class="text-secondary">{{ request.getUserPrincipal().principal.email }}</span>
+                {%endif%}
+
+                <td>
+                    <a href="/logout"
+                       class="btn btn-outline-secondary me-2"
+                    >Выход</a>
+                </td>
+
+            </div>
+
         </div>
     </div>
 

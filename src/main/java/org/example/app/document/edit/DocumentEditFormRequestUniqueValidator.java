@@ -1,6 +1,7 @@
-package org.example.app.document;
+package org.example.app.document.edit;
 
 import lombok.RequiredArgsConstructor;
+import org.example.app.document.DocumentEntityRepository;
 import org.example.app.document.edit.DocumentEditFormRequest;
 import org.example.util.validation.unique.UniqueFieldValidator;
 import org.springframework.stereotype.Service;

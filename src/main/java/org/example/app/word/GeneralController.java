@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -27,7 +28,8 @@ public class GeneralController {
     @GetMapping("/")
     public String index(@RequestParam(required = false, defaultValue = "1") Integer page,
                         @RequestParam(required = false, defaultValue = "20") Integer perPage,
-                        Model model, WordStatFilter filter) {
+                        Model model,
+                        WordStatFilter filter) {
 
         List<DocumentEntity> documents = documentEntityRepository.findAll();
         model.addAttribute("documents", documents);

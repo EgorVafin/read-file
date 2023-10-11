@@ -6,7 +6,7 @@
 
     {% block content %}
     <h6 class="display-6">Список документов</h6>
-    <br>
+    <p style="color:brown">{{ flashMessage }}</p>
 
     <div>
         <div class="row">
@@ -22,6 +22,7 @@
                             <th bgcolor="silver">Имя</th>
                             <th bgcolor="silver">URL</th>
                             <th bgcolor="silver">Дата</th>
+                            <th BGCOLOR="silver">Пользователь</th>
                         </tr>
                         </thead>
 
@@ -31,6 +32,7 @@
                                 <td><a href="/document/{{ document.id }}">{{ document.name }}</a></td>
                                 <td>{{ document.url }}</td>
                                 <td>{{ document.scrapedAt }}</td>
+                                <td>{{ document.user.firstName + " " +  document.user.lastName}}</td>
                             </tr>
                         {% endfor %}
 

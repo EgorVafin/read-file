@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "document")
@@ -30,5 +32,13 @@ public class DocumentEntity {
 
     @Column(name = "scraped_at")
     private Date scrapedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "document")
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    private Set<WordStatEntity> wordStatEntities;
 
 }

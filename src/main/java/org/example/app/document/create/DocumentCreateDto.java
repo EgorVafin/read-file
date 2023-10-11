@@ -1,13 +1,16 @@
-package org.example.app.document;
+package org.example.app.document.create;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.entity.User;
 import org.example.util.validation.unique.DocumentFormRequestUniqueValidator;
 import org.example.util.validation.unique.FieldUnique;
 import org.hibernate.validator.constraints.URL;
+
+import java.net.UnknownServiceException;
 
 @Getter
 @Setter

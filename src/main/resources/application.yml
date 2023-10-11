@@ -16,7 +16,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: 'true'
 
 #  thymeleaf:
@@ -28,10 +28,13 @@ spring:
 #      initialize-schema: always
 #      table-name: SPRING_SESSION
 
-#  flyway:
-#    locations: classpath:db/migration
-#  messages:
-#    fallback-to-system-locale: 'true'
+  flyway:
+    locations: classpath:db/migration
+    schemas: word_stat
+  #    baseline-on-migrate: true
+  messages:
+    fallback-to-system-locale: 'true'
+
 
 pebble:
   cache: false

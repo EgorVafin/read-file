@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "word_stat",
@@ -29,6 +32,7 @@ public class WordStatEntity {
     private int count;
 
     @ManyToOne
-    @JoinColumn(name = "document_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "document_id", referencedColumnName = "id", nullable = false)
     private DocumentEntity document;
 }

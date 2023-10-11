@@ -12,6 +12,8 @@
     <div class="row">
         <form method="post">
             <div class="col-md-6">
+                {% include "layout/csrf" %}
+
                 {% include "layout/form/input" with {'label':'Название', 'required': true,
                 'objName':'document', 'fieldName':'name', 'value': document.name } %}
 

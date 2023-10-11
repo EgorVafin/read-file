@@ -15,8 +15,9 @@
                 <div class="container-xxl">
 
                     <form action="/document/{{id}}/edit" method="post">
-{#                        {% include "layout/csrf" %}#}
                         <input type="hidden" name="id" value="{{ document.id }}">
+
+                        {% include "layout/csrf" %}
 
                         {% include "layout/form/input" with {'label':'Название', 'required': true,
                         'objName':'document', 'fieldName':'name', 'value': document.name } %}

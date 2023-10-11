@@ -1,7 +1,7 @@
 package org.example.util.validation.unique;
 
 import lombok.RequiredArgsConstructor;
-import org.example.app.document.DocumentCreateDto;
+import org.example.app.document.create.DocumentCreateDto;
 import org.example.app.document.DocumentEntityRepository;
 import org.springframework.stereotype.Service;
 

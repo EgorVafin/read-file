@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.app.document.DocumentEditFormRequestUniqueValidator;
 import org.example.util.validation.unique.FieldUnique;
 import org.hibernate.validator.constraints.Length;
 
