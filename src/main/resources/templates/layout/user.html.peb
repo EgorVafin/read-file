@@ -72,25 +72,39 @@
                     </ul>
                 </li>
 
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Профиль
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/login">Login</a></li>
+                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                        <li><a class="dropdown-item" href="/registration">Registration</a></li>
+
+                    </ul>
+                </li>
+
+
             </ul>
-            {#            <form class="d-flex">#}
-            {#                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">#}
-            {#                <button class="btn btn-outline-success" type="submit">Search</button>#}
-            {#            </form>#}
 
             <div class="col-md-3 text-end">
                 {%if request.getUserPrincipal() is not null %}
                     <span class="text-secondary">{{ request.getUserPrincipal().principal.email }}</span>
+                    <td>
+                        <form action="/logout" method="post">
+                            {% include "layout/csrf" %}
+                            <button type="submit" class="btn btn-dark" onclick="return confirm('Вы уверены?')">Logout</button>
+                        </form>
+                    </td>
+
+                    {% else %}
+                    <a class="btn btn-dark" href="/login">Login</a>
+
                 {%endif%}
 
-                <td>
-                    <a href="/logout"
-                       class="btn btn-outline-secondary me-2"
-                    >Выход</a>
-                </td>
 
             </div>
-
         </div>
     </div>
 

@@ -1,0 +1,35 @@
+    {% extends "layout/user" %}
+
+        {% block title %}
+        Добавление документа
+        {% endblock %}
+
+    {% block content %}
+
+    <form name="r" action="/registration" method="post">
+        <div class="col-md-6">
+            {% include "layout/csrf" %}
+
+    {% include "layout/form/input_email" with {'label':'Email', 'required': true,
+        'objName':'user', 'fieldName':'email', 'value': user.email } %}
+
+    {% include "layout/form/input_password" with {'label':'Password', 'required': true,
+        'objName':'user', 'fieldName':'password', 'value': user.password } %}
+
+    {% include "layout/form/input" with {'label':'Имя', 'required': true,
+        'objName':'user', 'fieldName':'firstName', 'value': user.firstName } %}
+
+    {% include "layout/form/input" with {'label':'Фамилия', 'required': true,
+        'objName':'user', 'fieldName':'lastName', 'value': user.lastName } %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Register</button>
+
+        {%if param.error %}
+            <h7>Incorrect name or password</h7>
+        {%endif%}
+
+    </form>
+    <br>
+
+    {% endblock %}

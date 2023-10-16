@@ -1,0 +1,9 @@
+<div class="form-label">
+    <label for="{{fieldName}}">{{ label }}{%if required%}*{%endif%}</label>
+    <input type="email"
+           class="form-control {%if hasFieldErrors(objName, fieldName) %}is-invalid{%endif%}"
+           id="{{fieldName}}"
+           name="{{fieldName}}"
+           value="{{ value }}">
+    {%include "layout/form/errors"%}
+</div>

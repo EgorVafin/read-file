@@ -15,8 +15,9 @@ import java.util.ArrayList;
 @Component
 public class AuthProvider implements AuthenticationProvider {
 
+    //todo нужно ли FINAL?
     @Autowired
-    private SecurityUserDetailsService userDetailsService;
+    private SecurityUserDetailsService securityUserDetailsService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -26,13 +27,14 @@ public class AuthProvider implements AuthenticationProvider {
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        User user = (User) userDetailsService.loadUserByUsername(name);
+        User user = (User) securityUserDetailsService.loadUserByUsername(name);
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Invalid password");
         }
 
+        //todo добавить права в лист
         return new UsernamePasswordAuthenticationToken(
-                user, password, new ArrayList<>());
+                user, password, user.getAuthorities());
     }
 
     @Override

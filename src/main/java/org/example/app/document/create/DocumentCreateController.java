@@ -23,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -94,8 +95,6 @@ public class DocumentCreateController {
         documentEntity.setScrapedAt(new Date());
         documentEntity.setUser((User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal());
 
-        //толстый или тонкий контроллер?
-
         List<WordStat> wordStatList = wordCounter.getOrderedStat();
 
         List<WordStatEntity> wordStatEntityList = new ArrayList<>();
@@ -108,7 +107,6 @@ public class DocumentCreateController {
             wordStatEntityList.add(wordStatEntity);
         }
 
-        //todo Transaction ??? SKILLBOX
         //FlashUtils.addMessage(redirectAttributes, "document.created", FlashMessage.Type.SUCCESS);
         documentEntityRepository.save(documentEntity);
 

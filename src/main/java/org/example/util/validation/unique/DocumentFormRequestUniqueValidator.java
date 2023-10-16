@@ -18,6 +18,7 @@ public class DocumentFormRequestUniqueValidator implements UniqueFieldValidator 
         }
 
         DocumentCreateDto dto = (DocumentCreateDto) validated;
+
         return switch (fieldName) {
             case "name" -> validateName(dto);
             case "url" -> validateUrl(dto);

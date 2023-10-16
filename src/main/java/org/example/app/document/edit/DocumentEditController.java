@@ -6,6 +6,8 @@ import org.example.app.document.DocumentEntityRepository;
 import org.example.entity.DocumentEntity;
 import org.example.lib.NotFoundException;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +25,7 @@ import java.util.Optional;
 public class DocumentEditController {
     private final DocumentEntityRepository documentEntityRepository;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/document/{id}/edit")
     public String edit(@PathVariable("id") long id,
                        Model model) {
@@ -57,7 +60,8 @@ public class DocumentEditController {
     }
 
     @GetMapping("/document/{id}/delete")
-    public String delete(@PathVariable("id") long id, RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable("id") long id,
+                         RedirectAttributes redirectAttributes) {
 
         DocumentEntity document = documentEntityRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Объект не найден"));

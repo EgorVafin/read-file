@@ -23,6 +23,7 @@
                             <th bgcolor="silver">URL</th>
                             <th bgcolor="silver">Дата</th>
                             <th BGCOLOR="silver">Пользователь</th>
+                            <th BGCOLOR="silver">Роли</th>
                         </tr>
                         </thead>
 
@@ -33,6 +34,7 @@
                                 <td>{{ document.url }}</td>
                                 <td>{{ document.scrapedAt }}</td>
                                 <td>{{ document.user.firstName + " " +  document.user.lastName}}</td>
+                                <td>{{ document.user.roles}}</td>
                             </tr>
                         {% endfor %}
 

@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +25,6 @@ import java.util.List;
 public class GeneralController {
     private final WordStatEntityRepository wordStatEntityRepository;
     private final DocumentEntityRepository documentEntityRepository;
-    private final WordCommonCounter wordCommonCounter;
 
     @GetMapping("/")
     public String index(@RequestParam(required = false, defaultValue = "1") Integer page,
@@ -38,8 +39,6 @@ public class GeneralController {
 
         if (filter.getFilter_word() == null && filter.getFilter_frequency() == null) {
             Page<SummaryWordStat> summaryWordStatList = wordStatEntityRepository.findCommonWordsStat(paging);
-
-
             model.addAttribute("words", summaryWordStatList);
         } else {
             List<WordStatEntity> summaryWordStatList2 = wordStatEntityRepository.findAll(buildSearch(filter));
@@ -48,11 +47,11 @@ public class GeneralController {
             for (WordStatEntity entity : summaryWordStatList2) {
                 words.add(entity.getWord());
             }
+
+
             Page<SummaryWordStat> summaryWordStatList3 = wordStatEntityRepository.findCommonWordsStatAfterFilter(paging, words);
             model.addAttribute("words", summaryWordStatList3);
         }
-
-
 
         return "index";
     }

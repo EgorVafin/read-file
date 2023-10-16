@@ -27,7 +27,6 @@ public interface WordStatEntityRepository extends JpaRepository<WordStatEntity, 
     static Specification<WordStatEntity> wordFrequencyEqual(Integer frequency) {
         return (root, query, criteriaBuilder)
                 -> criteriaBuilder.equal(root.get("count"), frequency);
-
     }
 
     static Specification<WordStatEntity> documentsIn(List<DocumentEntity> document) {
@@ -43,20 +42,12 @@ public interface WordStatEntityRepository extends JpaRepository<WordStatEntity, 
 
     Page<WordStatEntity> findAll(Pageable pageable);
 
-//    @Query(value = "SELECT count(document_id) as docCount,word as word, SUM(count) as frequency FROM word_stat WHERE word like %:word% GROUP BY word order by frequency DESC",
-//            countQuery = "select count(distinct word) from word_stat",
-//            nativeQuery = true)
-//    public Page<SummaryWordStat> findCommonWordsStat1(String word, Pageable page);
-
     //todo countQuery
-    @Query(value = "SELECT count(document_id) as docCount,word as word, SUM(count) as frequency FROM word_stat GROUP BY word order by frequency DESC",
+    @Query(value = "SELECT count(document_id) as docCount,word as word, SUM(count) as frequency FROM word_stat" +
+            " GROUP BY word order by frequency DESC",
             countQuery = "select count(distinct word) from word_stat",
             nativeQuery = true)
     public Page<SummaryWordStat> findCommonWordsStat(Pageable page);
-
-
-//    @Query(value = "SELECT word as word,  count as count, document_id FROM word_stat WHERE document_id = 1", nativeQuery = true)
-//    List <WordStatEntity> findAllByDocumentId(long id);
 
     Page <WordStatEntity> findByDocument(Pageable page, Optional<DocumentEntity> document);
 

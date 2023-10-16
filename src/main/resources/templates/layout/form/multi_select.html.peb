@@ -1,0 +1,18 @@
+<div class="form-label">
+    <label for="{{ fieldName }}">{{ label }}{%if required%}*{%endif%}</label>
+    <select class="form-select select2" multiple="multiple" name="{{fieldName}}" id="{{fieldName}}">
+            {%for item in items%}
+            <option value="{{ item.value }}" {%if item.selected %}selected="selected"{%endif%}>
+                    {{ item.label }}
+            </option>
+            {%endfor%}
+    </select>
+
+    {%if hasFieldErrors(objName, fieldName) %}
+        <div class="invalid-feedback" style="display: block!important;">
+                {% for err in getFieldErrors(objName, fieldName) %}
+                <div>{{ err }}</div>
+                {% endfor %}
+        </div>
+    {%endif%}
+</div>

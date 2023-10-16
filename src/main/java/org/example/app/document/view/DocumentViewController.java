@@ -28,6 +28,7 @@ public class DocumentViewController {
     private final WordStatEntityRepository wordStatEntityRepository;
 
 
+
     @GetMapping("/document/{id}")
     public String view(@PathVariable("id") long id,
                        @RequestParam(required = false, defaultValue = "1") Integer page,

@@ -1,0 +1,9 @@
+<div class="form-label">
+    <label for="{{ fieldName }}">{{ label }}{%if required%}*{%endif%}</label>
+    <select class="form-select" name="{{fieldName}}" id="{{fieldName}}">
+            {%for item in items%}
+            <option value="{{ item.value }}" {%if item.selected %}selected="selected"{%endif%}>{{ item.label }}</option>
+            {%endfor%}
+    </select>
+    {%include "layout/form/errors"%}
+</div>

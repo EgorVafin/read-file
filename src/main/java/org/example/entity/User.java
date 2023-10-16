@@ -7,9 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -40,9 +43,15 @@ public class User implements UserDetails {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Column(name = "roles", columnDefinition = "JSON")
+    @Convert(converter = UserRolesConverter.class)
+    private List<String> roles;
+
+
+    //todo как вернуть правильно роли?
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority(roles.get(0)));
     }
 
     @Override
@@ -69,5 +78,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }

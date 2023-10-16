@@ -1,0 +1,37 @@
+    {% extends "layout/user" %}
+
+        {% block title %}
+        Добавление документа
+        {% endblock %}
+
+    {% block content %}
+
+    <form name="loginPage" action="/login" method="post">
+        <div class="col-md-6">
+            {% include "layout/csrf" %}
+
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username"/>
+            <br>
+
+            {% include "layout/form/input_password" with {'label':'Password', 'required': true,
+            'objName':'user', 'fieldName':'password', 'value': user.password } %}
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+
+
+        {%if param.error %}
+            <h7>Incorrect name or password</h7>
+        {%endif%}
+
+
+    </form>
+    <br>
+
+    <form action="/registration">
+        <button type="submit" class="btn btn-secondary">Registration</button>
+    </form>
+
+    {% endblock %}

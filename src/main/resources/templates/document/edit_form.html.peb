@@ -10,10 +10,8 @@
 
     <div>
         <div class="row">
-
             <section class="list">
                 <div class="container-xxl">
-
                     <form action="/document/{{id}}/edit" method="post">
                         <input type="hidden" name="id" value="{{ document.id }}">
 
