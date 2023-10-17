@@ -17,6 +17,9 @@
             {% include "layout/form/input_password" with {'label':'Password', 'required': true,
             'objName':'user', 'fieldName':'password', 'value': user.password } %}
 
+            <label for="remember-me">Remember Me:</label>
+            <input type="checkbox" id="remember-me" name="remember-me">
+
         </div>
 
         <button type="submit" class="btn btn-primary">Login</button>

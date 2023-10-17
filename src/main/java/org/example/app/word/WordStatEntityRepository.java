@@ -19,6 +19,10 @@ public interface WordStatEntityRepository extends JpaRepository<WordStatEntity, 
         PagingAndSortingRepository<WordStatEntity, Long>,
         JpaSpecificationExecutor<WordStatEntity> {
 
+    Page<WordStatEntity> findAll(Pageable pageable);
+
+    Page<WordStatEntity> findByDocument(Pageable page, Optional<DocumentEntity> document);
+
     static Specification<WordStatEntity> wordNameLike(String word) {
         return (root, query, criteriaBuilder)
                 -> criteriaBuilder.like(root.get("word"), "%" + word + "%");
@@ -34,21 +38,45 @@ public interface WordStatEntityRepository extends JpaRepository<WordStatEntity, 
                 -> criteriaBuilder.in(root.get("document")).value(document);
     }
 
-    @Query(value = "SELECT count(document_id) as docCount,word as word, SUM(count) as frequency\n" +
+    @Query(value = "SELECT count(document_id) as docCount, word as word, SUM(count) as frequency\n" +
             "FROM word_stat GROUP BY word having word in :words order by frequency DESC",
             countQuery = "select count(distinct word) from word_stat",
             nativeQuery = true)
     public Page<SummaryWordStat> findCommonWordsStatAfterFilter(Pageable page, List<String> words);
 
-    Page<WordStatEntity> findAll(Pageable pageable);
-
     //todo countQuery
-    @Query(value = "SELECT count(document_id) as docCount,word as word, SUM(count) as frequency FROM word_stat" +
+    @Query(value = "SELECT count(document_id) as docCount, word as word, SUM(count) as frequency FROM word_stat" +
             " GROUP BY word order by frequency DESC",
             countQuery = "select count(distinct word) from word_stat",
             nativeQuery = true)
-    public Page<SummaryWordStat> findCommonWordsStat(Pageable page);
+    public Page<SummaryWordStat> findNoFilters(Pageable page);
 
-    Page <WordStatEntity> findByDocument(Pageable page, Optional<DocumentEntity> document);
+    @Query(value = "SELECT count(document_id) as docCount, word as word, SUM(count) as frequency FROM word_stat" +
+            " GROUP BY word HAVING word = :filterWord ORDER BY frequency DESC ",
+            countQuery = "select count(distinct word) from word_stat",
+            nativeQuery = true)
+    public Page<SummaryWordStat> findFilterByWord(Pageable page, String filterWord);
+
+
+    @Query(value = "SELECT count(document_id) as docCount, word as word, SUM(count) as frequency FROM word_stat" +
+            " GROUP BY word HAVING frequency = :filterFrequency ORDER BY frequency DESC ",
+            countQuery = "select count(distinct word) from word_stat",
+            nativeQuery = true)
+    public Page<SummaryWordStat> findFilterByFrequency(Pageable page, Integer filterFrequency);
+
+    @Query(value = "SELECT count(document_id) as docCount, word as word, SUM(count) as frequency FROM word_stat" +
+            " GROUP BY word HAVING word = :filterWord OR frequency = :filterFrequency ORDER BY frequency DESC ",
+            countQuery = "select count(distinct word) from word_stat",
+            nativeQuery = true)
+    public Page<SummaryWordStat> findFilterByWordAndFrequency(Pageable page,
+                                                              String filterWord,
+                                                              Integer filterFrequency);
+
+    @Query(value = "SELECT count(document_id) as docCount, word as word, SUM(count) as frequency FROM word_stat" +
+            " WHERE document_id IN :documents" +
+            " GROUP BY word ORDER BY frequency DESC",
+            countQuery = "select count(distinct word) from word_stat WHERE document_id IN :documents",
+            nativeQuery = true)
+    public Page<SummaryWordStat> findFilterByDocuments(Pageable page, List<Long> documents);
 
 }

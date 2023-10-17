@@ -38,13 +38,13 @@ public class SecurityConfig {
                         .permitAll())
                 .logout((logout) -> logout.logoutUrl("/logout")
                         .logoutSuccessUrl("/")
-                        .deleteCookies("JSESSIONID")
+                        .deleteCookies("SESSION")
                 )
                 .rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
-                        .tokenValiditySeconds(7 * 24 * 60 * 60)
-                        .key("key"))
-                        .userDetailsService(securityUserDetailsService)
-
+                        .tokenValiditySeconds(7 * 24 * 3600)
+                        .key("YtMWYzYy00OTc1LWJl12345"))
+                .userDetailsService(securityUserDetailsService)
+                .exceptionHandling(c -> c.accessDeniedPage("/access_denied"))
                 .build();
     }
 

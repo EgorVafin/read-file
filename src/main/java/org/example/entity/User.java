@@ -48,10 +48,10 @@ public class User implements UserDetails {
     private List<String> roles;
 
 
-    //todo как вернуть правильно роли?
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(roles.get(0)));
+
+        return roles.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override

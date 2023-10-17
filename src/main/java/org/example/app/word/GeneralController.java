@@ -4,17 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.example.app.document.DocumentEntityRepository;
 import org.example.entity.DocumentEntity;
 import org.example.entity.WordStatEntity;
-import org.example.service.WordCommonCounter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -29,29 +25,14 @@ public class GeneralController {
     @GetMapping("/")
     public String index(@RequestParam(required = false, defaultValue = "1") Integer page,
                         @RequestParam(required = false, defaultValue = "20") Integer perPage,
-                        Model model,
-                        WordStatFilter filter) {
+                        WordStatFilter filter,
+                        Model model) {
 
         List<DocumentEntity> documents = documentEntityRepository.findAll();
         model.addAttribute("documents", documents);
         Pageable paging = PageRequest.of(page - 1, perPage);
-        model.addAttribute("filter", filter);
-
-        if (filter.getFilter_word() == null && filter.getFilter_frequency() == null) {
-            Page<SummaryWordStat> summaryWordStatList = wordStatEntityRepository.findCommonWordsStat(paging);
-            model.addAttribute("words", summaryWordStatList);
-        } else {
-            List<WordStatEntity> summaryWordStatList2 = wordStatEntityRepository.findAll(buildSearch(filter));
-
-            List<String> words = new ArrayList<>();
-            for (WordStatEntity entity : summaryWordStatList2) {
-                words.add(entity.getWord());
-            }
-
-
-            Page<SummaryWordStat> summaryWordStatList3 = wordStatEntityRepository.findCommonWordsStatAfterFilter(paging, words);
-            model.addAttribute("words", summaryWordStatList3);
-        }
+        var words = wordStatsFilters(filter, paging);
+        model.addAttribute("words", words);
 
         return "index";
     }
@@ -72,7 +53,55 @@ public class GeneralController {
         if (filter.getFilter_document() != null && !filter.getFilter_document().isEmpty()) {
             searchCriteria = searchCriteria.and(WordStatEntityRepository.documentsIn(filter.getFilter_document()));
         }
-
         return searchCriteria;
+    }
+
+    @GetMapping("/access_denied")
+    public String accessDenied() {
+        return "access_denied";
+    }
+
+    private Page<SummaryWordStat> wordStatsFilters(WordStatFilter filter,
+                                                   Pageable paging) {
+
+        Page<SummaryWordStat> stats = null;
+        if (filter.getFilter_word() == null
+                && filter.getFilter_frequency() == null
+                && filter.getFilter_document().size() == 0) {
+            return wordStatEntityRepository.findNoFilters(paging);
+        }
+
+        if (filter.getFilter_word() != null
+                && filter.getFilter_frequency() == null
+                && filter.getFilter_document().size() == 0) {
+            return wordStatEntityRepository.findFilterByWord(paging, filter.getFilter_word());
+        }
+
+        if (filter.getFilter_word() == null
+                && filter.getFilter_frequency() != null
+                && filter.getFilter_document().size() == 0) {
+            return wordStatEntityRepository.findFilterByFrequency(paging, filter.getFilter_frequency());
+        }
+
+        if (filter.getFilter_word() != null
+                && filter.getFilter_frequency() != null
+                && filter.getFilter_document().size() == 0) {
+            return wordStatEntityRepository.findFilterByWordAndFrequency(paging,
+                    filter.getFilter_word(),
+                    filter.getFilter_frequency());
+        }
+
+        List<Long> documentIds = filter.getFilter_document()
+                .stream()
+                .map(DocumentEntity::getId).toList();
+        if (
+                filter.getFilter_word().isEmpty()
+                        && filter.getFilter_frequency() == null
+                        && !filter.getFilter_document().isEmpty()) {
+
+            return wordStatEntityRepository.findFilterByDocuments(paging, documentIds);
+        }
+
+        return stats;
     }
 }

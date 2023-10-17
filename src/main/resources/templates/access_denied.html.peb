@@ -1,0 +1,12 @@
+    {% extends "layout/user" %}
+
+        {% block title %}
+        Access denied
+        {% endblock %}
+
+    {% block content %}
+
+    <h6 class="display-6">Access denied</h6>
+    <p style="color:brown">{{ flashMessage }}</p>
+
+    {% endblock %}
