@@ -2,6 +2,7 @@ package org.example.app.word;
 
 import lombok.RequiredArgsConstructor;
 import org.example.app.document.DocumentEntityRepository;
+import org.example.app.oauth.OAuthVKController;
 import org.example.entity.DocumentEntity;
 import org.example.entity.WordStatEntity;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,7 @@ public class GeneralController {
         Pageable paging = PageRequest.of(page - 1, perPage);
         var words = wordStatsFilters(filter, paging);
         model.addAttribute("words", words);
+        model.addAttribute("vkOauthUrl", OAuthVKController.VkOauthUrl);
 
         return "index";
     }
@@ -44,7 +46,6 @@ public class GeneralController {
             searchCriteria = searchCriteria.and(WordStatEntityRepository.wordNameLike(filter.getFilter_word()));
         }
 
-        //todo делает выборку в Entity, но нужно искать в SummaryWordStat. Поэтому неправильно считает FREQUENCY
         if (filter.getFilter_frequency() != null /*&& filter.getFilter_frequency().matches("[0-9]+")*/) {
             searchCriteria = searchCriteria.or(WordStatEntityRepository.
                     wordFrequencyEqual(Integer.valueOf(filter.getFilter_frequency())));

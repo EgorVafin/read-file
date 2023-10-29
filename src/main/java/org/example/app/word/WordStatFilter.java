@@ -13,5 +13,4 @@ public class WordStatFilter {
     private String filter_word;
     private Integer filter_frequency;
     private List<DocumentEntity> filter_document = new ArrayList<>();
-
 }

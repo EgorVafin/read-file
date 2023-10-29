@@ -3,12 +3,14 @@ package org.example.config;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.app.oauth.OAuthVKController;
 import org.example.entity.User;
 import org.example.repository.UserRepository;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,8 +29,8 @@ public class SecurityController {
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
-    public String login() {
-
+    public String login(Model model) {
+        model.addAttribute("vkOauthUrl", OAuthVKController.VkOauthUrl);
         return "auth/login";
     }
 
@@ -58,7 +60,6 @@ public class SecurityController {
 
         return "redirect:/login";
     }
-
 
 
     private String getErrorMessage(HttpServletRequest request, String key) {

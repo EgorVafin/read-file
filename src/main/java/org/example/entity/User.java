@@ -3,6 +3,7 @@ package org.example.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +27,9 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "vk_user_id", nullable = true)
+    private Long vkUserId;
+
     @Email
     @NotBlank
     @Column(name = "email", nullable = false, unique = true)
@@ -42,6 +46,7 @@ public class User implements UserDetails {
     @NotBlank
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
 
     @Column(name = "roles", columnDefinition = "JSON")
     @Convert(converter = UserRolesConverter.class)

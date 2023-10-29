@@ -1,4 +1,14 @@
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 769892815853-fielh4uqb7o2bnclc8300kjvu48lec00.apps.googleusercontent.com
+            clientSecret: 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
+            redirectUri: http://localhost:8080/login/oauth2/code/google
+            scope: openid, email
+
   session:
     store-type: jdbc
     jdbc:
@@ -48,6 +58,8 @@ logging:
         security: DEBUG
 server:
   port: '8080'
+
+
 
 
 
